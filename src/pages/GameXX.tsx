@@ -19,7 +19,7 @@ type Attempt = {
   feedback: { correctPosition: number; correctColor: number };
 };
 
-const Game: React.FC<GameProps> = () => {
+const GameXX: React.FC<GameProps> = () => {
   const [secretCode, setSecretCode] = useState<string[]>([]);
   const [attempts, setAttempts] = useState<Attempt[]>(
     Array(maxAttempts).fill({
@@ -250,4 +250,4 @@ const Game: React.FC<GameProps> = () => {
     </div>
   );
 };
-export default Game;
+export default GameXX;

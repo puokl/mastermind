@@ -29,23 +29,12 @@ const Game: React.FC<GameProps> = () => {
     return colorMap[color] || "";
   };
 
-  const maxAttempts: number = 6;
+  const maxAttempts: number = 10;
   const codeLength: number = 6;
+  const pegsPerRow =
+    codeLength % 2 === 0 ? codeLength / 2 : (codeLength + 1) / 2;
 
   const [secretCode, setSecretCode] = useState<string[]>([]);
-  //   const [attempts, setAttempts] = useState<string[][]>(
-  //     Array(maxAttempts).fill([])
-  //   );
-  const [attempts, setAttempts] = useState<Attempt[]>(
-    Array(maxAttempts).fill({
-      guess: Array(codeLength).fill(""),
-      feedback: { correctPosition: 0, correctColor: 0 },
-    })
-  );
-
-  const [currentGuess, setCurrentGuess] = useState<string[]>(
-    Array(codeLength).fill("")
-  );
   const [activePeg, setActivePeg] = useState<number | null>(null);
   const [currentAttemptNumber, setCurrentAttemptNumber] = useState<number>(0);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -54,8 +43,17 @@ const Game: React.FC<GameProps> = () => {
   const [selectedPegs, setSelectedPegs] = useState<number[]>([]);
   const [selectedPeg, setSelectedPeg] = useState<number | null>(null);
   const [hoveredPeg, setHoveredPeg] = useState<number | null>(null);
-
   const [currentPeg, setCurrentPeg] = useState(0);
+  const [attempts, setAttempts] = useState<Attempt[]>(
+    Array(maxAttempts).fill({
+      guess: Array(codeLength).fill(""),
+      feedback: { correctPosition: 0, correctColor: 0 },
+    })
+  );
+  const [currentGuess, setCurrentGuess] = useState<string[]>(
+    Array(codeLength).fill("")
+  );
+
   const navigate = useNavigate();
   const goToHome = () => {
     navigate("/");
@@ -91,7 +89,6 @@ const Game: React.FC<GameProps> = () => {
     let correctPosition = 0;
     let correctColor = 0;
     const secretCodeCopy = [...secretCode];
-
     // Check for correct position and color
     guess.forEach((color, index) => {
       if (color === secretCode[index]) {
@@ -99,7 +96,6 @@ const Game: React.FC<GameProps> = () => {
         secretCodeCopy[index] = "-"; // Mark this as counted
       }
     });
-
     // Check for correct color but wrong position
     guess.forEach((color, index) => {
       if (color !== secretCode[index] && secretCodeCopy.includes(color)) {
@@ -190,6 +186,7 @@ const Game: React.FC<GameProps> = () => {
     console.log("Attempts updated:", attempts);
     console.log("currentGuess", currentGuess);
     console.log("currentPeg", currentPeg);
+    console.log("pegsPerRow", pegsPerRow);
   }, [attempts, currentGuess, currentPeg]);
 
   useEffect(() => {
@@ -296,71 +293,85 @@ const Game: React.FC<GameProps> = () => {
           </div>
 
           <div className="p-2 m-4 bg-teal-200">
-            <p>
+            <div>
               <div className="w-4 h-4 bg-red-600 rounded-full"></div> = correct
               color in correct position
-            </p>
-            <p>
-              <div className="w-4 h-4 bg-white rounded-full"></div> = correct
+            </div>
+            <div>
+              <div className="w-4 h-4 bg-black rounded-full"></div> = correct
               color in wrong position
-            </p>
+            </div>
           </div>
           <div className="flex justify-around h-8 bg-white">
             <h2>your code</h2>
             <h3>key pegs</h3>
           </div>
           {/* Attempts board */}
-          {attempts.map((attempt, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-around py-2 bg-slate-400 "
-            >
-              {/* Guess Pegs Section - your code*/}
-
-              <div className="flex space-x-2 bg-slate-400">
-                {/* Rendering pegs */}
-                {[...Array(codeLength)].map((_, pegIndex) => (
-                  <div
-                    key={pegIndex}
-                    className={`w-6 h-6 rounded-full border-2 border-gray-600 ${getColorClass(
-                      attempt.guess[pegIndex]
-                    )}`}
-                    onClick={
-                      index === currentAttemptNumber
-                        ? () => handlePegClick(pegIndex)
-                        : undefined
-                    }
-                  >
-                    {attempt.guess[pegIndex] === "" && (
-                      <div className="w-full h-full bg-white rounded-full"></div>
-                    )}
+          <div className="m-10">
+            {attempts.map((attempt, index) => (
+              <div key={index} className="flex items-center bg-slate-400">
+                {/* Guess Pegs Section - your code*/}
+                <div className="p-4 bg-orange-800">
+                  <div className="flex space-x-2 bg-orange-800">
+                    {/* Rendering pegs */}
+                    {[...Array(codeLength)].map((_, pegIndex) => (
+                      <div
+                        key={pegIndex}
+                        className={`w-6 h-6 rounded-full border-2 border-gray-600 ${getColorClass(
+                          attempt.guess[pegIndex]
+                        )}`}
+                        onClick={
+                          index === currentAttemptNumber
+                            ? () => handlePegClick(pegIndex)
+                            : undefined
+                        }
+                      >
+                        {attempt.guess[pegIndex] === "" && (
+                          <div className="w-full h-full rounded-full bg-orange-950"></div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-
-              {/* Feedback Section - key pegs*/}
-              <div className="flex space-x-1 bg-stone-700 w-100%">
-                <div className="flex space-x-1">
-                  {Array(attempt.feedback.correctPosition)
+                </div>
+                {/* Feedback Section - key pegs*/}
+                <div
+                  className={`grid grid-cols-${pegsPerRow} gap-1 bg-orange-800 p-2.5`}
+                >
+                  {/* default empty pegs */}
+                  {Array(
+                    codeLength -
+                      attempt.feedback.correctPosition -
+                      attempt.feedback.correctColor
+                  )
                     .fill(null)
                     .map((_, i) => (
                       <div
                         key={i}
-                        className="w-4 h-4 bg-red-900 rounded-full"
+                        className="w-4 h-4 rounded-full bg-orange-950"
+                      ></div>
+                    ))}
+
+                  {/* colored pegs based on feedback */}
+                  {Array(attempt.feedback.correctPosition)
+                    .fill("red-600")
+                    .map((color, i) => (
+                      <div
+                        key={i}
+                        className={`w-4 h-4 rounded-full bg-${color}`}
                       ></div>
                     ))}
                   {Array(attempt.feedback.correctColor)
-                    .fill(null)
-                    .map((_, i) => (
+                    .fill("black")
+                    .map((color, i) => (
                       <div
                         key={i}
-                        className="w-4 h-4 bg-white rounded-full"
+                        className={`w-4 h-4 rounded-full bg-${color}`}
                       ></div>
                     ))}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
       {/* Current guess */}
