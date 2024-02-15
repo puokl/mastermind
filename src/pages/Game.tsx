@@ -42,7 +42,7 @@ const Game: React.FC<GameProps> = () => {
   };
 
   const maxAttempts: number = 10;
-  const codeLength: number = 6;
+  const codeLength: number = 4;
   const pegsPerRow =
     codeLength % 2 === 0 ? codeLength / 2 : (codeLength + 1) / 2;
 
@@ -141,7 +141,7 @@ const Game: React.FC<GameProps> = () => {
     );
     if (isWinningGuess) {
       setHasWon(true);
-      setIsGameOver(true);
+      // setIsGameOver(true);
       // setIsGameInProgress(false);
     } else if (currentAttemptNumber + 1 >= maxAttempts) {
       setIsGameOver(true);
@@ -193,7 +193,7 @@ const Game: React.FC<GameProps> = () => {
   }, [secretCode]);
 
   return (
-    <div className="w-screen min-h-screen mt-10 bg-blue-400">
+    <div className="w-screen min-h-screen pt-10 bg-blue-400">
       {/* Start Game */}
       {!isGameInProgress && (
         <button
@@ -205,191 +205,182 @@ const Game: React.FC<GameProps> = () => {
       )}
 
       {isGameInProgress && (
-        <div className="w-100% bg-yellow-300 min-h-screen ">
-          {/* {automatic selection} */}
-          <div className="flex flex-col items-center justify-center h-24 mb-4 space-x-2 bg-red-200 ">
-            {/* <p className="mb-2">Choose the color of peg n: {currentPeg + 1}:</p> */}
-            {currentGuess.includes("") ? (
-              <p className="mb-2">
-                Choose the color of peg n: {currentGuess.indexOf("") + 1}:
-              </p>
-            ) : (
-              <p className="mb-2">You can change the colors manually</p>
-            )}
-            <div className="flex space-x-2">
-              {pegColors.map((color) => {
-                const index = currentGuess.indexOf("");
-                return (
-                  <div
-                    key={color}
-                    className={`w-6 h-6 rounded-full ${getColorClass(
-                      color
-                    )} hover:${getColorClassDark(color)}`}
-                    onClick={() => selectColorFromPalette(color, index)}
-                  ></div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="flex items-center justify-center space-x-8 bg-cyan-500">
-            {/* {current guess} */}
-
-            <div className="flex space-x-2">
-              {currentGuess.map((color, pegIndex) => (
-                <div
-                  key={pegIndex}
-                  className={`relative w-6 h-6 rounded-full border-2 border-gray-600 ${
-                    activePeg === pegIndex ? "scale-125" : ""
-                  } ${getColorClass(
-                    color
-                  )} hover:cursor-pointer hover:opacity-75`}
-                  onMouseEnter={() => setHoveredPeg(pegIndex)}
-                  onMouseLeave={() => setHoveredPeg(null)}
-                  onClick={() => isGameInProgress && handlePegClick(pegIndex)}
-                >
-                  {color === "" &&
-                    hoveredPeg === pegIndex &&
-                    isGameInProgress && (
-                      <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
-                        Click to manually choose this peg color
-                      </div>
-                    )}
-                  {color !== "" &&
-                    hoveredPeg === pegIndex &&
-                    isGameInProgress && (
-                      <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
-                        Click to manually modify this peg color
-                      </div>
-                    )}
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={submitGuess}
-              className="p-2 text-sm text-white bg-blue-500 rounded"
-              disabled={isGameOver}
-            >
-              Submit
-            </button>
-          </div>
-          {/* {manual selection} */}
-          <div className="w-auto h-24 my-6 bg-slate-500">
-            <div className="flex flex-col w-auto h-full p-4 border border-gray-300 rounded">
-              {activePeg !== null && (
-                <p className="mb-2">Choose the color of peg {activePeg + 1}:</p>
-              )}
-
-              {activePeg !== null && (
-                <div className="flex space-x-2 ">
-                  {pegColors.map((color) => (
-                    <div
-                      key={color}
-                      className={`w-6 h-6 rounded-full ${getColorClass(color)}`}
-                      onClick={() => selectColor(color)}
-                    ></div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Attempts board */}
-          <div className="m-10 border-2 border-orange-950">
-            {attempts.map((attempt, index) => (
-              <div
-                key={index}
-                className="flex items-center bg-green-400 border-orange-400 border-1"
-              >
-                {/* Guess Pegs Section - your code*/}
-                <div className="p-3 md:p-3.5 bg-orange-800 ">
-                  <div className="flex space-x-2 bg-orange-800 ">
-                    {/* Rendering pegs */}
-                    {[...Array(codeLength)].map((_, pegIndex) => (
+        <div className="w-100% bg-yellow-300 min-h-screen p-10">
+          <div className="md:flex">
+            <div className="md:w-1/2">
+              {/* {automatic selection} */}
+              <div className="flex flex-col items-center justify-center h-24 mb-4 space-x-2 bg-red-200 ">
+                {/* <p className="mb-2">Choose the color of peg n: {currentPeg + 1}:</p> */}
+                {currentGuess.includes("") ? (
+                  <p className="mb-2">
+                    Choose the color of peg n: {currentGuess.indexOf("") + 1}:
+                  </p>
+                ) : (
+                  <p className="mb-2">You can change the colors manually</p>
+                )}
+                <div className="flex space-x-2">
+                  {pegColors.map((color) => {
+                    const index = currentGuess.indexOf("");
+                    return (
                       <div
-                        key={pegIndex}
-                        className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-gray-600 ${getColorClass(
-                          attempt.guess[pegIndex]
-                        )}`}
-                        onClick={
-                          index === currentAttemptNumber
-                            ? () => handlePegClick(pegIndex)
-                            : undefined
-                        }
-                      >
-                        {attempt.guess[pegIndex] === "" && (
-                          <div className="w-full h-full rounded-full bg-orange-950"></div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* Feedback Section - key pegs*/}
-                <div
-                  className={`grid grid-cols-${pegsPerRow} gap-1 bg-orange-800 p-2`}
-                >
-                  {/* default empty pegs */}
-                  {Array(
-                    codeLength -
-                      attempt.feedback.correctPosition -
-                      attempt.feedback.correctColor
-                  )
-                    .fill(null)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className="w-3 h-3 rounded-full md:w-4 md:h-4 bg-orange-950"
+                        key={color}
+                        className={`w-6 h-6 rounded-full ${getColorClass(
+                          color
+                        )} hover:${getColorClassDark(color)}`}
+                        onClick={() => selectColorFromPalette(color, index)}
                       ></div>
-                    ))}
-
-                  {/* colored pegs based on feedback */}
-                  {Array(attempt.feedback.correctPosition)
-                    .fill("red-600")
-                    .map((color, i) => (
-                      <div
-                        key={i}
-                        className={`w-3 h-3 md:w-4 md:h-4 rounded-full bg-${color} bg-gradient-to-br from-${color}-light to-${color}-dark`}
-                      ></div>
-                    ))}
-                  {Array(attempt.feedback.correctColor)
-                    .fill("black")
-                    .map((color, i) => (
-                      <div
-                        key={i}
-                        className={`w-3 h-3 md:w-4 md:h-4 rounded-full bg-${color}`}
-                      ></div>
-                    ))}
+                    );
+                  })}
                 </div>
               </div>
-            ))}
+              <div className="flex items-center justify-center space-x-8 bg-cyan-500">
+                {/* {current guess} */}
+
+                <div className="flex space-x-2">
+                  {currentGuess.map((color, pegIndex) => (
+                    <div
+                      key={pegIndex}
+                      className={`relative w-6 h-6 rounded-full border-2 border-gray-600 ${
+                        activePeg === pegIndex ? "scale-125" : ""
+                      } ${getColorClass(
+                        color
+                      )} hover:cursor-pointer hover:opacity-75`}
+                      onMouseEnter={() => setHoveredPeg(pegIndex)}
+                      onMouseLeave={() => setHoveredPeg(null)}
+                      onClick={() =>
+                        isGameInProgress && handlePegClick(pegIndex)
+                      }
+                    >
+                      {color === "" &&
+                        hoveredPeg === pegIndex &&
+                        isGameInProgress && (
+                          <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
+                            Click to manually choose this peg color
+                          </div>
+                        )}
+                      {color !== "" &&
+                        hoveredPeg === pegIndex &&
+                        isGameInProgress && (
+                          <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
+                            Click to manually modify this peg color
+                          </div>
+                        )}
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={submitGuess}
+                  className="p-2 text-sm text-white bg-blue-500 rounded"
+                  disabled={isGameOver}
+                >
+                  Submit
+                </button>
+              </div>
+              {/* {manual selection} */}
+              <div className="w-auto h-24 my-6 bg-slate-500">
+                <div className="flex flex-col w-auto h-full p-4 border border-gray-300 rounded">
+                  {activePeg !== null && (
+                    <p className="mb-2">
+                      Choose the color of peg {activePeg + 1}:
+                    </p>
+                  )}
+
+                  {activePeg !== null && (
+                    <div className="flex space-x-2 ">
+                      {pegColors.map((color) => (
+                        <div
+                          key={color}
+                          className={`w-6 h-6 rounded-full ${getColorClass(
+                            color
+                          )}`}
+                          onClick={() => selectColor(color)}
+                        ></div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            {/* Attempts board */}
+            <div className="m-10 md:w-1/2 ">
+              <div className="">
+                {attempts.map((attempt, index) => (
+                  <div
+                    key={index}
+                    className="inline-flex items-center bg-green-400 border-orange-400 border-1"
+                  >
+                    {/* Guess Pegs Section - your code*/}
+                    <div className="p-3 md:p-3.5 bg-orange-800 ">
+                      <div className="flex space-x-2 bg-orange-800 ">
+                        {/* Rendering pegs */}
+                        {[...Array(codeLength)].map((_, pegIndex) => (
+                          <div
+                            key={pegIndex}
+                            className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-gray-600 ${getColorClass(
+                              attempt.guess[pegIndex]
+                            )}`}
+                            onClick={
+                              index === currentAttemptNumber
+                                ? () => handlePegClick(pegIndex)
+                                : undefined
+                            }
+                          >
+                            {attempt.guess[pegIndex] === "" && (
+                              <div className="w-full h-full rounded-full bg-orange-950"></div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Feedback Section - key pegs*/}
+                    <div
+                      className={`grid grid-rows-2 grid-flow-col gap-1 bg-orange-800 p-2 w-20`}
+                    >
+                      {/* default empty pegs */}
+                      {Array(
+                        codeLength -
+                          attempt.feedback.correctPosition -
+                          attempt.feedback.correctColor
+                      )
+                        .fill(null)
+                        .map((_, i) => (
+                          <div
+                            key={i}
+                            className="w-3 h-3 rounded-full md:w-4 md:h-4 bg-orange-950"
+                          ></div>
+                        ))}
+
+                      {/* colored pegs based on feedback */}
+                      {Array(attempt.feedback.correctPosition)
+                        .fill("red-600")
+                        .map((color, i) => (
+                          <div
+                            key={i}
+                            className={`w-3 h-3 md:w-4 md:h-4 rounded-full bg-${color} bg-gradient-to-br from-${color}-light to-${color}-dark`}
+                          ></div>
+                        ))}
+                      {Array(attempt.feedback.correctColor)
+                        .fill("black")
+                        .map((color, i) => (
+                          <div
+                            key={i}
+                            className={`w-3 h-3 md:w-4 md:h-4 rounded-full bg-${color}`}
+                          ></div>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="p-2 m-4 bg-teal-200">
-            <div>
-              <div className="w-4 h-4 bg-red-600 rounded-full"></div> = correct
-              color in correct position
+            <div className="flex items-center">
+              <div className="w-4 h-4 mr-2 bg-red-600 rounded-full"></div> =
+              correct color in correct position
             </div>
-            <div>
-              <div className="w-4 h-4 bg-black rounded-full"></div> = correct
-              color in wrong position
-            </div>
-          </div>
-          <div className="h-40 w-100 bg-cyan-200">
-            <div
-              className={`w-8 h-8 md:w-4 md:h-4 rounded-full bg-gradient-to-br from-blue-400 to-blue-900`}
-            ></div>
-            <div
-              className={`w-8 h-8 md:w-4 md:h-4 rounded-full relative bg-blue-900`}
-              style={{
-                background: `radial-gradient(circle at 70% 30%, blue, transparent 70%)`,
-                boxShadow: `0 0 8px rgba(255, 255, 255, 0.9)`,
-              }}
-            ></div>
-            <div
-              className={`relative w-8 h-8 md:w-4 md:h-4 rounded-full bg-blue-900`}
-              style={{ boxShadow: `0 0 8px rgba(255, 255, 255, 0.5)` }}
-            >
-              <div
-                className={`absolute w-full h-full rounded-full bg-gradient-to-r from-blue-300 to-transparent`}
-              ></div>
+            <div className="flex items-center">
+              <div className="w-4 h-4 mr-2 bg-black rounded-full"></div> =
+              correct color in wrong position
             </div>
           </div>
         </div>
@@ -427,6 +418,26 @@ const Game: React.FC<GameProps> = () => {
         <div className="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
           <div className="p-4 bg-white rounded">
             <p>Congratulations! You won!</p>
+            <div className="flex mt-2 space-x-2">
+              {secretCode.map((color, index) => (
+                <div
+                  key={index}
+                  className={`w-6 h-6 rounded-full ${getColorClass(color)}`}
+                ></div>
+              ))}
+            </div>
+            <button
+              onClick={startGame}
+              className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
+            >
+              Restart Game
+            </button>
+            <button
+              onClick={goToHome}
+              className="px-4 py-2 mt-4 ml-4 text-white bg-gray-500 rounded"
+            >
+              Go to Home
+            </button>
           </div>
         </div>
       )}
