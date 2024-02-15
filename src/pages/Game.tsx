@@ -29,6 +29,18 @@ const Game: React.FC<GameProps> = () => {
     return colorMap[color] || "";
   };
 
+  const getColorClassDark = (color: string): string => {
+    const colorMap: { [key: string]: string } = {
+      red: "bg-red-700",
+      green: "bg-green-700",
+      blue: "bg-blue-700",
+      yellow: "bg-yellow-700",
+      purple: "bg-purple-700",
+      orange: "bg-orange-700",
+    };
+    return colorMap[color] || "";
+  };
+
   const maxAttempts: number = 10;
   const codeLength: number = 6;
   const pegsPerRow =
@@ -141,19 +153,6 @@ const Game: React.FC<GameProps> = () => {
     setCurrentGuess(Array(codeLength).fill(""));
   };
 
-  //   const correctGuesses = attempts.reduce((count, attempt) => {
-  //     return count + (attempt.feedback.correctPosition === codeLength ? 1 : 0);
-  //   }, 0);
-
-  // const selectColorFromPalette = (selectedColor: string) => {
-  //   const nextEmptyPegIndex = currentGuess.indexOf("");
-  //   if (nextEmptyPegIndex !== -1) {
-  //     const newGuess = [...currentGuess];
-  //     newGuess[nextEmptyPegIndex] = selectedColor;
-  //     setCurrentGuess(newGuess);
-  //     setCurrentPeg((prevPeg) => prevPeg + 1);
-  //   }
-  // };
   const selectColorFromPalette = (selectedColor: string, pegIndex: number) => {
     if (pegIndex !== -1 && currentPeg < codeLength) {
       const newGuess = [...currentGuess];
@@ -194,7 +193,7 @@ const Game: React.FC<GameProps> = () => {
   }, [secretCode]);
 
   return (
-    <div className="w-screen mt-10">
+    <div className="w-screen min-h-screen mt-10 bg-blue-400">
       {/* Start Game */}
       {!isGameInProgress && (
         <button
@@ -206,9 +205,9 @@ const Game: React.FC<GameProps> = () => {
       )}
 
       {isGameInProgress && (
-        <div className="w-100% bg-slate-300">
+        <div className="w-100% bg-yellow-300 min-h-screen ">
           {/* {automatic selection} */}
-          <div className="flex flex-col h-24 mb-4 space-x-2 bg-red-200">
+          <div className="flex flex-col items-center justify-center h-24 mb-4 space-x-2 bg-red-200 ">
             {/* <p className="mb-2">Choose the color of peg n: {currentPeg + 1}:</p> */}
             {currentGuess.includes("") ? (
               <p className="mb-2">
@@ -217,20 +216,22 @@ const Game: React.FC<GameProps> = () => {
             ) : (
               <p className="mb-2">You can change the colors manually</p>
             )}
-            <div className="flex">
+            <div className="flex space-x-2">
               {pegColors.map((color) => {
                 const index = currentGuess.indexOf("");
                 return (
                   <div
                     key={color}
-                    className={`w-6 h-6 rounded-full ${getColorClass(color)} `}
+                    className={`w-6 h-6 rounded-full ${getColorClass(
+                      color
+                    )} hover:${getColorClassDark(color)}`}
                     onClick={() => selectColorFromPalette(color, index)}
                   ></div>
                 );
               })}
             </div>
           </div>
-          <div className="flex items-center justify-center space-x-8">
+          <div className="flex items-center justify-center space-x-8 bg-cyan-500">
             {/* {current guess} */}
 
             <div className="flex space-x-2">
@@ -265,7 +266,7 @@ const Game: React.FC<GameProps> = () => {
             </div>
             <button
               onClick={submitGuess}
-              className="p-4 text-white bg-blue-500 rounded"
+              className="p-2 text-sm text-white bg-blue-500 rounded"
               disabled={isGameOver}
             >
               Submit
@@ -292,32 +293,21 @@ const Game: React.FC<GameProps> = () => {
             </div>
           </div>
 
-          <div className="p-2 m-4 bg-teal-200">
-            <div>
-              <div className="w-4 h-4 bg-red-600 rounded-full"></div> = correct
-              color in correct position
-            </div>
-            <div>
-              <div className="w-4 h-4 bg-black rounded-full"></div> = correct
-              color in wrong position
-            </div>
-          </div>
-          <div className="flex justify-around h-8 bg-white">
-            <h2>your code</h2>
-            <h3>key pegs</h3>
-          </div>
           {/* Attempts board */}
-          <div className="m-10">
+          <div className="m-10 border-2 border-orange-950">
             {attempts.map((attempt, index) => (
-              <div key={index} className="flex items-center bg-slate-400">
+              <div
+                key={index}
+                className="flex items-center bg-green-400 border-orange-400 border-1"
+              >
                 {/* Guess Pegs Section - your code*/}
-                <div className="p-4 bg-orange-800">
-                  <div className="flex space-x-2 bg-orange-800">
+                <div className="p-3 md:p-3.5 bg-orange-800 ">
+                  <div className="flex space-x-2 bg-orange-800 ">
                     {/* Rendering pegs */}
                     {[...Array(codeLength)].map((_, pegIndex) => (
                       <div
                         key={pegIndex}
-                        className={`w-6 h-6 rounded-full border-2 border-gray-600 ${getColorClass(
+                        className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-gray-600 ${getColorClass(
                           attempt.guess[pegIndex]
                         )}`}
                         onClick={
@@ -335,7 +325,7 @@ const Game: React.FC<GameProps> = () => {
                 </div>
                 {/* Feedback Section - key pegs*/}
                 <div
-                  className={`grid grid-cols-${pegsPerRow} gap-1 bg-orange-800 p-2.5`}
+                  className={`grid grid-cols-${pegsPerRow} gap-1 bg-orange-800 p-2`}
                 >
                   {/* default empty pegs */}
                   {Array(
@@ -347,7 +337,7 @@ const Game: React.FC<GameProps> = () => {
                     .map((_, i) => (
                       <div
                         key={i}
-                        className="w-4 h-4 rounded-full bg-orange-950"
+                        className="w-3 h-3 rounded-full md:w-4 md:h-4 bg-orange-950"
                       ></div>
                     ))}
 
@@ -357,7 +347,7 @@ const Game: React.FC<GameProps> = () => {
                     .map((color, i) => (
                       <div
                         key={i}
-                        className={`w-4 h-4 rounded-full bg-${color}`}
+                        className={`w-3 h-3 md:w-4 md:h-4 rounded-full bg-${color} bg-gradient-to-br from-${color}-light to-${color}-dark`}
                       ></div>
                     ))}
                   {Array(attempt.feedback.correctColor)
@@ -365,12 +355,42 @@ const Game: React.FC<GameProps> = () => {
                     .map((color, i) => (
                       <div
                         key={i}
-                        className={`w-4 h-4 rounded-full bg-${color}`}
+                        className={`w-3 h-3 md:w-4 md:h-4 rounded-full bg-${color}`}
                       ></div>
                     ))}
                 </div>
               </div>
             ))}
+          </div>
+          <div className="p-2 m-4 bg-teal-200">
+            <div>
+              <div className="w-4 h-4 bg-red-600 rounded-full"></div> = correct
+              color in correct position
+            </div>
+            <div>
+              <div className="w-4 h-4 bg-black rounded-full"></div> = correct
+              color in wrong position
+            </div>
+          </div>
+          <div className="h-40 w-100 bg-cyan-200">
+            <div
+              className={`w-8 h-8 md:w-4 md:h-4 rounded-full bg-gradient-to-br from-blue-400 to-blue-900`}
+            ></div>
+            <div
+              className={`w-8 h-8 md:w-4 md:h-4 rounded-full relative bg-blue-900`}
+              style={{
+                background: `radial-gradient(circle at 70% 30%, blue, transparent 70%)`,
+                boxShadow: `0 0 8px rgba(255, 255, 255, 0.9)`,
+              }}
+            ></div>
+            <div
+              className={`relative w-8 h-8 md:w-4 md:h-4 rounded-full bg-blue-900`}
+              style={{ boxShadow: `0 0 8px rgba(255, 255, 255, 0.5)` }}
+            >
+              <div
+                className={`absolute w-full h-full rounded-full bg-gradient-to-r from-blue-300 to-transparent`}
+              ></div>
+            </div>
           </div>
         </div>
       )}
