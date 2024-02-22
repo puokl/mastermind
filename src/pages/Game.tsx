@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Rules from "../components/Rules";
 
 type GameProps = {};
 type Attempt = {
@@ -196,12 +197,15 @@ const Game: React.FC<GameProps> = () => {
     <div className="w-screen min-h-screen pt-10 bg-blue-400">
       {/* Start Game */}
       {!isGameInProgress && (
-        <button
-          onClick={startGame}
-          className="px-4 py-2 text-white bg-blue-500 rounded"
-        >
-          Start Game
-        </button>
+        <div className="p-10">
+          <Rules />
+          <button
+            onClick={startGame}
+            className="px-4 py-2 text-white bg-blue-500 rounded"
+          >
+            Start Game
+          </button>
+        </div>
       )}
 
       {isGameInProgress && (
@@ -210,10 +214,9 @@ const Game: React.FC<GameProps> = () => {
             <div className="md:w-1/2">
               {/* {automatic selection} */}
               <div className="flex flex-col items-center justify-center h-24 mb-4 space-x-2 bg-red-200 ">
-                {/* <p className="mb-2">Choose the color of peg n: {currentPeg + 1}:</p> */}
                 {currentGuess.includes("") ? (
                   <p className="mb-2">
-                    Choose the color of peg n: {currentGuess.indexOf("") + 1}:
+                    Choose the color of peg n. {currentGuess.indexOf("") + 1}:
                   </p>
                 ) : (
                   <p className="mb-2">You can change the colors manually</p>
@@ -221,21 +224,28 @@ const Game: React.FC<GameProps> = () => {
                 <div className="flex space-x-2">
                   {pegColors.map((color) => {
                     const index = currentGuess.indexOf("");
+
                     return (
                       <div
                         key={color}
                         className={`w-6 h-6 rounded-full ${getColorClass(
                           color
-                        )} hover:${getColorClassDark(color)}`}
+                        )} hover:${getColorClassDark(color)} block m-0`}
+                        style={{
+                          background: `radial-gradient(circle at 2px 2px, ${color}, #4C4C4C)`,
+                        }}
                         onClick={() => selectColorFromPalette(color, index)}
                       ></div>
                     );
                   })}
                 </div>
               </div>
+              <div>
+                <p className="text-xs md:text-md">
+                  Click on the peg to manually choose or modify the color
+                </p>
+              </div>
               <div className="flex items-center justify-center space-x-8 bg-cyan-500">
-                {/* {current guess} */}
-
                 <div className="flex space-x-2">
                   {currentGuess.map((color, pegIndex) => (
                     <div
@@ -251,7 +261,7 @@ const Game: React.FC<GameProps> = () => {
                         isGameInProgress && handlePegClick(pegIndex)
                       }
                     >
-                      {color === "" &&
+                      {/* {color === "" &&
                         hoveredPeg === pegIndex &&
                         isGameInProgress && (
                           <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
@@ -264,7 +274,7 @@ const Game: React.FC<GameProps> = () => {
                           <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
                             Click to manually modify this peg color
                           </div>
-                        )}
+                        )} */}
                     </div>
                   ))}
                 </div>
@@ -276,12 +286,12 @@ const Game: React.FC<GameProps> = () => {
                   Submit
                 </button>
               </div>
-              {/* {manual selection} */}
-              <div className="w-auto h-24 my-6 bg-slate-500">
-                <div className="flex flex-col w-auto h-full p-4 border border-gray-300 rounded">
+
+              <div className="w-auto h-16 bg-slate-100">
+                <div className="flex flex-col items-center justify-center w-auto h-full p-4 border border-gray-100 rounded">
                   {activePeg !== null && (
-                    <p className="mb-2">
-                      Choose the color of peg {activePeg + 1}:
+                    <p className="mb-2 text-xs">
+                      Choose the color of peg n. {activePeg + 1}:
                     </p>
                   )}
 
@@ -360,7 +370,7 @@ const Game: React.FC<GameProps> = () => {
                         ></div>
                       ))}
                     {Array(attempt.feedback.correctColor)
-                      .fill("black")
+                      .fill("white")
                       .map((color, i) => (
                         <div
                           key={i}
@@ -379,7 +389,7 @@ const Game: React.FC<GameProps> = () => {
               correct color in correct position
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 mr-2 bg-black rounded-full"></div> =
+              <div className="w-4 h-4 mr-2 bg-white rounded-full"></div> =
               correct color in wrong position
             </div>
           </div>
