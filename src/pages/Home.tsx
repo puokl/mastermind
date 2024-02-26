@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <div className="mb-4 text-4xl font-bold">Welcome to Game Playground!</div>
+      <div className="mb-4 text-4xl font-bold">
+        Welcome to Phuoc's Playground!
+      </div>
       <p className="mb-8 text-lg text-gray-700">
         Explore and enjoy various games. Click on the links below to play!
       </p>

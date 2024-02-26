@@ -127,9 +127,9 @@ const Game: React.FC<GameProps> = () => {
       return;
     }
     const feedback = generateFeedback(currentGuess);
-    console.log("Submitting guess:", currentGuess);
-    console.log("secretCode", secretCode);
-    console.log("feedback", feedback);
+    // console.log("Submitting guess:", currentGuess);
+    // console.log("secretCode", secretCode);
+    // console.log("feedback", feedback);
     setAttempts((prevAttempts) =>
       prevAttempts.map((attempt, index) =>
         index === currentAttemptNumber
@@ -163,7 +163,6 @@ const Game: React.FC<GameProps> = () => {
       setSelectedPegs([...selectedPegs, pegIndex + 1]);
       setSelectedPeg(null);
     } else {
-      // Inform the user to select the specific peg manually
       console.log("Please select a specific peg manually.");
     }
   };
@@ -179,7 +178,7 @@ const Game: React.FC<GameProps> = () => {
     setCurrentAttemptNumber(0);
     setIsGameOver(false);
     setHasWon(false);
-    setIsGameInProgress(true); // Start the game
+    setIsGameInProgress(true);
   };
 
   useEffect(() => {
@@ -194,26 +193,36 @@ const Game: React.FC<GameProps> = () => {
   }, [secretCode]);
 
   return (
-    <div className="w-screen min-h-screen pt-10 bg-blue-400">
+    <div className="relative w-screen min-h-screen pt-10 bg-slate-100">
       {/* Start Game */}
       {!isGameInProgress && (
         <div className="p-10">
-          <Rules />
-          <button
-            onClick={startGame}
-            className="px-4 py-2 text-white bg-blue-500 rounded"
-          >
-            Start Game
-          </button>
+          <div className="flex flex-col items-center justify-around gap-10 lg:flex-row lg:items-start">
+            <Rules />
+            <img
+              src="/Mastermind.jpeg"
+              alt="Description of your image"
+              className="mt-4 max-h-80 lg:ml-4 lg:mt-0"
+            />
+          </div>
+          <div className="flex items-center justify-center w-full">
+            <button
+              onClick={startGame}
+              className="px-4 py-2 mx-auto mt-10 text-white bg-blue-500 rounded "
+            >
+              Start Game
+            </button>
+          </div>
         </div>
       )}
 
       {isGameInProgress && (
-        <div className="w-100% bg-yellow-300 min-h-screen p-10">
-          <div className="md:flex">
-            <div className="md:w-1/2">
+        <div className="w-100% bg-slate-100 min-h-screen pb-10 px-10">
+          <div className="md:flex md:items-center">
+            {/* SELECTION AREA */}
+            <div className="p-4 border rounded-md bg-slate-200 md:w-1/2 md:max-h-96">
               {/* {automatic selection} */}
-              <div className="flex flex-col items-center justify-center h-24 mb-4 space-x-2 bg-red-200 ">
+              <div className="flex flex-col items-center justify-center h-24 mb-4 space-x-2 md:text-lg">
                 {currentGuess.includes("") ? (
                   <p className="mb-2">
                     Choose the color of peg n. {currentGuess.indexOf("") + 1}:
@@ -228,29 +237,29 @@ const Game: React.FC<GameProps> = () => {
                     return (
                       <div
                         key={color}
-                        className={`w-6 h-6 rounded-full ${getColorClass(
+                        className={`w-8 h-8 rounded-full md:w-8 md:h-8 ${getColorClass(
                           color
                         )} hover:${getColorClassDark(color)} block m-0`}
-                        style={{
-                          background: `radial-gradient(circle at 2px 2px, ${color}, #4C4C4C)`,
-                        }}
+                        // style={{
+                        //   background: `radial-gradient(circle at 2px 2px, ${color}, #4C4C4C)`,
+                        // }}
                         onClick={() => selectColorFromPalette(color, index)}
                       ></div>
                     );
                   })}
                 </div>
               </div>
-              <div>
-                <p className="text-xs md:text-md">
+              <div className="flex flex-col items-center justify-center h-4 mb-4 space-x-2">
+                <p className="text-xs md:text-md lg:text-lg">
                   Click on the peg to manually choose or modify the color
                 </p>
               </div>
-              <div className="flex items-center justify-center space-x-8 bg-cyan-500">
+              <div className="flex items-center justify-center space-x-8 ">
                 <div className="flex space-x-2">
                   {currentGuess.map((color, pegIndex) => (
                     <div
                       key={pegIndex}
-                      className={`relative w-6 h-6 rounded-full border-2 border-gray-600 ${
+                      className={`relative w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-600 ${
                         activePeg === pegIndex ? "scale-125" : ""
                       } ${getColorClass(
                         color
@@ -260,37 +269,22 @@ const Game: React.FC<GameProps> = () => {
                       onClick={() =>
                         isGameInProgress && handlePegClick(pegIndex)
                       }
-                    >
-                      {/* {color === "" &&
-                        hoveredPeg === pegIndex &&
-                        isGameInProgress && (
-                          <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
-                            Click to manually choose this peg color
-                          </div>
-                        )}
-                      {color !== "" &&
-                        hoveredPeg === pegIndex &&
-                        isGameInProgress && (
-                          <div className="absolute w-48 px-2 py-1 mt-2 text-xs transform -translate-x-1/2 bg-gray-400 rounded top-full left-1/2">
-                            Click to manually modify this peg color
-                          </div>
-                        )} */}
-                    </div>
+                    ></div>
                   ))}
                 </div>
                 <button
                   onClick={submitGuess}
-                  className="p-2 text-sm text-white bg-blue-500 rounded"
+                  className="p-2 text-sm text-white bg-teal-600 rounded"
                   disabled={isGameOver}
                 >
-                  Submit
+                  Check
                 </button>
               </div>
 
-              <div className="w-auto h-16 bg-slate-100">
-                <div className="flex flex-col items-center justify-center w-auto h-full p-4 border border-gray-100 rounded">
+              <div className="w-auto h-16 md:pt-2">
+                <div className="flex flex-col items-center justify-center w-auto h-full p-4 rounded">
                   {activePeg !== null && (
-                    <p className="mb-2 text-xs">
+                    <p className="mb-2 text-xs md:text-md lg:text-lg">
                       Choose the color of peg n. {activePeg + 1}:
                     </p>
                   )}
@@ -300,7 +294,7 @@ const Game: React.FC<GameProps> = () => {
                       {pegColors.map((color) => (
                         <div
                           key={color}
-                          className={`w-6 h-6 rounded-full ${getColorClass(
+                          className={`w-6 h-6 rounded-full md:w-8 md:h-8 ${getColorClass(
                             color
                           )}`}
                           onClick={() => selectColor(color)}
@@ -310,8 +304,18 @@ const Game: React.FC<GameProps> = () => {
                   )}
                 </div>
               </div>
+              {/* <div className="flex flex-col items-center justify-center w-auto p-2 m-4 border rounded-md bg-stone-200 sm:hidden md:block">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 mr-2 bg-red-600 rounded-full"></div> =
+                  correct color in correct position
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 mr-2 bg-white rounded-full"></div> =
+                  correct color in wrong position
+                </div>
+              </div> */}
             </div>
-            {/* Attempts board */}
+            {/* ATTEMPTS BOARD */}
             <div className="m-10 md:w-1/2 ">
               {/* <div className=""> */}
               {attempts.map((attempt, index) => (
@@ -320,7 +324,7 @@ const Game: React.FC<GameProps> = () => {
                   className="flex items-center justify-center border-orange-400 border-1"
                 >
                   {/* Guess Pegs Section - your code*/}
-                  <div className="p-3 md:p-3.5 bg-orange-800 ">
+                  <div className="p-3 md:p-3.5 bg-orange-800">
                     <div className="flex space-x-2 bg-orange-800 ">
                       {/* Rendering pegs */}
                       {[...Array(codeLength)].map((_, pegIndex) => (
@@ -380,28 +384,28 @@ const Game: React.FC<GameProps> = () => {
                   </div>
                 </div>
               ))}
+              <div className="flex flex-col items-center justify-center w-auto p-2 m-4 mt-8 border rounded-md bg-slate-200">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 mr-2 bg-red-600 rounded-full"></div> =
+                  correct color in correct position
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 mr-2 bg-white rounded-full"></div> =
+                  correct color in wrong position
+                </div>
+              </div>
               {/* </div> */}
-            </div>
-          </div>
-          <div className="p-2 m-4 bg-teal-200">
-            <div className="flex items-center">
-              <div className="w-4 h-4 mr-2 bg-red-600 rounded-full"></div> =
-              correct color in correct position
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 mr-2 bg-white rounded-full"></div> =
-              correct color in wrong position
             </div>
           </div>
         </div>
       )}
       {/* Current guess */}
       {isGameOver && (
-        <div className="absolute inset-0 flex items-center justify-center min-h-screen bg-gray-700 bg-opacity-50">
-          <div className="p-4 bg-white rounded">
-            <p>Game Over!</p>
-            <p className="mt-2">The correct code was:</p>
-            <div className="flex mt-2 space-x-2">
+        <div className="absolute inset-0 flex items-center justify-center h-full min-h-screen bg-gray-700 bg-opacity-50">
+          <div className="p-4 bg-white rounded ">
+            <p className="flex justify-center font-bold">Game Over!</p>
+            <p className="flex justify-center mt-2">The correct code was:</p>
+            <div className="flex justify-center mt-2 space-x-2">
               {secretCode.map((color, index) => (
                 <div
                   key={index}

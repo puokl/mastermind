@@ -2,7 +2,7 @@ import React from "react";
 
 function Rules() {
   return (
-    <div className="m-5 mb-20 text-white">
+    <div className="m-5 mb-20 text-black">
       <h2 className="mb-4 text-2xl font-bold">Mastermind Game</h2>
       <p>
         Mastermind is a classic code-breaking game where the goal is to guess
