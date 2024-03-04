@@ -13,15 +13,21 @@ function Home() {
       <div className="flex flex-col space-y-4">
         <Link
           to="/play"
-          className="p-4 text-white transition duration-300 bg-blue-500 rounded-md hover:bg-blue-600"
+          className="p-4 text-white transition duration-300 rounded-md bg-sky-500 hover:bg-sky-600"
         >
-          Play Mastermind
+          Mastermind
         </Link>
         <Link
           to="https://nonogram-theta.vercel.app/"
           className="p-4 text-white transition duration-300 bg-green-500 rounded-md hover:bg-green-600"
         >
-          Play Nonogram
+          Nonogram
+        </Link>
+        <Link
+          to="https://minesweeper-two-gilt.vercel.app/"
+          className="p-4 text-white transition duration-300 bg-teal-500 rounded-md hover:bg-teal-600"
+        >
+          Minesweeper
         </Link>
       </div>
     </div>
