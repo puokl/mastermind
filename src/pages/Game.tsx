@@ -193,7 +193,7 @@ const Game: React.FC<GameProps> = () => {
   }, [secretCode]);
 
   return (
-    <div className="relative w-screen min-h-screen pt-10 bg-slate-100">
+    <div className="relative w-screen min-h-screen pt-10 bg-slate-400">
       {/* Start Game */}
       {!isGameInProgress && (
         <div className="p-10">
@@ -217,7 +217,7 @@ const Game: React.FC<GameProps> = () => {
       )}
 
       {isGameInProgress && (
-        <div className="w-100% bg-slate-100 min-h-screen pb-10 px-10">
+        <div className="w-100% bg-slate-200 min-h-screen pb-10 px-10">
           <div className="md:flex md:items-center">
             {/* SELECTION AREA */}
             <div className="p-4 border rounded-md bg-slate-200 md:w-1/2 md:max-h-96">

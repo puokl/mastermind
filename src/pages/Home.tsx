@@ -29,6 +29,12 @@ function Home() {
         >
           Minesweeper
         </Link>
+        <Link
+          to="https://tetris-delta-eight.vercel.app/"
+          className="p-4 text-white transition duration-300 rounded-md bg-lime-500 hover:bg-lime-600"
+        >
+          Tetris
+        </Link>
       </div>
     </div>
   );
