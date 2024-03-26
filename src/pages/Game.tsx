@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Rules from "../components/Rules";
+import { Link } from "react-router-dom";
+import { RiHome2Line } from "react-icons/ri";
 
 type GameProps = {};
 type Attempt = {
@@ -193,10 +195,17 @@ const Game: React.FC<GameProps> = () => {
   }, [secretCode]);
 
   return (
-    <div className="relative w-screen min-h-screen pt-10 bg-slate-400">
+    <div className="relative w-screen min-h-screen ">
+      <Link
+        to="/"
+        className="absolute z-10 text-black top-4 right-4 bg-slate-200 rounded-xl"
+      >
+        <RiHome2Line size={32} />
+      </Link>
+
       {/* Start Game */}
       {!isGameInProgress && (
-        <div className="p-10">
+        <div className="p-10 pt-20">
           <div className="flex flex-col items-center justify-around gap-10 lg:flex-row lg:items-start">
             <Rules />
             <img
@@ -217,7 +226,7 @@ const Game: React.FC<GameProps> = () => {
       )}
 
       {isGameInProgress && (
-        <div className="w-100% bg-slate-200 min-h-screen pb-10 px-10">
+        <div className="w-100% bg-slate-200 min-h-screen py-10 px-10 pt-10">
           <div className="md:flex md:items-center">
             {/* SELECTION AREA */}
             <div className="p-4 border rounded-md bg-slate-200 md:w-1/2 md:max-h-96">
