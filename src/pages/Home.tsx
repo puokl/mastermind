@@ -13,22 +13,19 @@ function Home() {
       <div className="flex flex-col space-y-4">
         <Link
           to="/play"
-          // className="p-4 text-white transition duration-300 bg-blue-600 rounded-md hover:bg-blue-700"
-          className="flex items-center justify-center w-40 h-10 p-2 text-white transition duration-300 bg-blue-600 rounded-md hover:bg-yellow-700"
+          className="flex items-center justify-center w-40 h-10 p-2 text-white transition duration-300 bg-blue-600 rounded-md hover:bg-blue-700"
         >
           Mastermind
         </Link>
         <a
           href="https://nonogram-theta.vercel.app/"
-          // className="p-4 text-white transition duration-300 bg-green-600 rounded-md hover:bg-green-700"
-          className="flex items-center justify-center w-40 h-10 p-2 text-white transition duration-300 bg-green-600 rounded-md hover:bg-yellow-700"
+          className="flex items-center justify-center w-40 h-10 p-2 text-white transition duration-300 bg-green-600 rounded-md hover:bg-green-700"
         >
           Nonogram
         </a>
         <a
           href="https://minesweeper-two-gilt.vercel.app/"
-          // className="p-4 text-white transition duration-300 bg-red-600 rounded-md hover:bg-red-700"
-          className="flex items-center justify-center h-10 p-2 text-white transition duration-300 bg-red-600 rounded-md hover:bg-yellow-700"
+          className="flex items-center justify-center h-10 p-2 text-white transition duration-300 bg-red-600 rounded-md hover:bg-red-700"
         >
           Minesweeper
         </a>
